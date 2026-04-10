@@ -1,16 +1,133 @@
-# React + Vite
+# 🚑 Smart Ambulance System – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Overview
 
-Currently, two official plugins are available:
+This is the **frontend** of the Smart Ambulance System.
+It provides a user-friendly interface for patients, drivers, and admins to interact with the system.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The application allows users to:
 
-## React Compiler
+* Request emergency ambulance services
+* Track ambulance status
+* Manage login and registration
+* View real-time updates
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **React.js** (Frontend Framework)
+* **HTML5, CSS3**
+* **JavaScript (ES6+)**
+* **Axios / Fetch API** (for backend communication)
+* **Bootstrap / Tailwind CSS** (if used)
+
+---
+
+## 📂 Project Structure
+
+```
+frontend/
+│
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   ├── App.js
+│   └── index.js
+│
+├── package.json
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```
+git clone https://github.com/Akash1010-max/Smart-Ambulance-System.git
+```
+
+### 2️⃣ Navigate to frontend
+
+```
+cd Smart-Ambulance-System/frontend
+```
+
+### 3️⃣ Install dependencies
+
+```
+npm install
+```
+
+### 4️⃣ Start the application
+
+```
+npm start
+```
+
+👉 The app will run on:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🔗 Backend Connection
+
+Make sure your backend server is running.
+
+Update API base URL inside:
+
+```
+src/services/api.js (or wherever API is configured)
+```
+
+Example:
+
+```javascript
+const BASE_URL = "http://localhost:5000";
+```
+
+---
+
+## ✨ Features
+
+* 🚑 Emergency ambulance request
+* 🔐 User authentication (login/register)
+* 📍 Location-based service handling
+* 📊 Real-time updates (if implemented)
+* 👨‍⚕️ Driver & user dashboards
+
+---
+
+## ⚠️ Important Notes
+
+* Ensure backend is running before using frontend
+* Configure `.env` if required
+* Do not commit sensitive keys
+
+---
+
+## 📸 Future Improvements
+
+* Live ambulance tracking (Google Maps integration)
+* Notifications system
+* UI enhancements
+* Mobile responsiveness improvements
+
+---
+
+## 👨‍💻 Author
+
+**Akash**
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
