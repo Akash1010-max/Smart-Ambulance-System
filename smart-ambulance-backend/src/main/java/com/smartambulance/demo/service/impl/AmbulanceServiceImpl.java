@@ -76,7 +76,7 @@ public class AmbulanceServiceImpl implements AmbulanceService {
                 "AMBULANCE"
         );
 
-        return new AuthResponseDTO(token);
+        return new AuthResponseDTO(token, amb.getId());
     }
 
 

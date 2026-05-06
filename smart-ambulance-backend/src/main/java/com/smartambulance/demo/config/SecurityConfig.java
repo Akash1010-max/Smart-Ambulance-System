@@ -58,6 +58,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
                     // AMBULANCE
                     .requestMatchers("/api/emergency/pending").hasRole("AMBULANCE")
+                    .requestMatchers("/api/emergency/active").hasRole("AMBULANCE") 
                     .requestMatchers("/api/emergency/assign/**").hasRole("AMBULANCE")
                     .requestMatchers("/api/emergency/*/pickup").hasRole("AMBULANCE")
                     .requestMatchers("/api/emergency/*/drop").hasRole("AMBULANCE")

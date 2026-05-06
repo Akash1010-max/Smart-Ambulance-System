@@ -1,5 +1,11 @@
 package com.smartambulance.demo.service.impl;
 
+import java.util.List;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.smartambulance.demo.config.jwt.JwtUtil;
 import com.smartambulance.demo.dto.AuthResponseDTO;
 import com.smartambulance.demo.dto.EmergencyResponseDTO;
@@ -12,11 +18,6 @@ import com.smartambulance.demo.exception.ResourceNotFoundException;
 import com.smartambulance.demo.repository.EmergencyRequestRepository;
 import com.smartambulance.demo.repository.HospitalRepository;
 import com.smartambulance.demo.service.HospitalService;
-import java.util.List;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 public class HospitalServiceImpl implements HospitalService {
@@ -80,7 +81,7 @@ public class HospitalServiceImpl implements HospitalService {
                 "HOSPITAL"
         );
 
-        return new AuthResponseDTO(token);
+        return new AuthResponseDTO(token, hospital.getId());
     }
 
     private EmergencyResponseDTO mapEmergencyToDTO(EmergencyRequest req) {

@@ -1,6 +1,13 @@
 package com.smartambulance.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.smartambulance.demo.dto.AmbulanceRequestDTO;
 import com.smartambulance.demo.dto.AmbulanceResponseDTO;
@@ -56,15 +63,12 @@ public class AmbulanceController {
 
     }
 
-    // ===============================
-    // Get Ambulance Location
-    // (Used for Live Tracking)
-    // ===============================
-    @GetMapping("/{id}")
-    public AmbulanceResponseDTO getAmbulance(@PathVariable Long id) {
+// Get Ambulance Location
+// ===============================
+@GetMapping("/id/{id}")
+public AmbulanceResponseDTO getAmbulance(@PathVariable Long id) {
 
-        return service.getAmbulance(id);
+    return service.getAmbulance(id);
 
-    }
-
+}
 }

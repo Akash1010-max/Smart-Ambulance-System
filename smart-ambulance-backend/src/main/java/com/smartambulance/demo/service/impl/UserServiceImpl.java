@@ -1,5 +1,9 @@
 package com.smartambulance.demo.service.impl;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.smartambulance.demo.config.jwt.JwtUtil;
 import com.smartambulance.demo.dto.AuthResponseDTO;
 import com.smartambulance.demo.dto.UserRequestDTO;
 import com.smartambulance.demo.dto.UserResponseDTO;
@@ -8,9 +12,6 @@ import com.smartambulance.demo.exception.InvalidCredentialsException;
 import com.smartambulance.demo.exception.UserNotFoundException;
 import com.smartambulance.demo.repository.UserRepository;
 import com.smartambulance.demo.service.UserService;
-import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.smartambulance.demo.config.jwt.JwtUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
         );
 
 
-        return new AuthResponseDTO(token);
+        return new AuthResponseDTO(token, user.getId());
     }
 
 

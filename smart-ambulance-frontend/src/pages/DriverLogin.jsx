@@ -10,28 +10,36 @@ export default function DriverLogin() {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+  try {
+    const res = await fetch("http://localhost:8080/api/ambulance/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
 
-    try {
-
-      const res = await API.post("/api/ambulance/login", {
-        email,
-        password
-      });
-
-      localStorage.setItem("token", res.data.token);
-
-      alert("Driver Login Successful 🚑");
-
-      navigate("/driver");
-
-    } catch (err) {
-
-      console.error(err);
-      alert("Driver Login Failed");
-
+    if (!res.ok) {
+      throw new Error("Login failed");
     }
 
-  };
+    const data = await res.json();
+
+    // save token
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("ambulanceId", data.id);
+    alert("Login Success ✅");
+
+    window.location.href = "/driver";
+
+  } catch (err) {
+    console.error(err);
+    alert("Login Failed");
+  }
+};
 
   return (
     <div>

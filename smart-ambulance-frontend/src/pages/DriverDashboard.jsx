@@ -5,7 +5,7 @@ export default function DriverDashboard() {
 
   const [requests, setRequests] = useState([]);
 
-  const ambulanceId = 1;
+const ambulanceId = localStorage.getItem("ambulanceId");
 
   // =============================
   // Load Active Emergencies
