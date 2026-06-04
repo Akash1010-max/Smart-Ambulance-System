@@ -63,13 +63,13 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     .requestMatchers("/api/emergency/*/pickup").hasRole("AMBULANCE")
                     .requestMatchers("/api/emergency/*/drop").hasRole("AMBULANCE")
                     .requestMatchers("/api/emergency/*/complete").hasRole("AMBULANCE")
+                    .requestMatchers("/api/hospital/completed").hasRole("HOSPITAL")
                     .requestMatchers("/api/hospital/emergencies").hasRole("HOSPITAL")
-
                     // EVERYTHING ELSE
                     .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
+            
     return http.build();
 }
 }

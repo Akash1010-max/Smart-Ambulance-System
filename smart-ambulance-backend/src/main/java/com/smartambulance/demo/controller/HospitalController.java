@@ -1,5 +1,13 @@
 package com.smartambulance.demo.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.smartambulance.demo.dto.AuthResponseDTO;
 import com.smartambulance.demo.dto.EmergencyResponseDTO;
 import com.smartambulance.demo.dto.HospitalRequestDTO;
@@ -8,11 +16,6 @@ import com.smartambulance.demo.entity.Hospital;
 import com.smartambulance.demo.service.HospitalService;
 
 import jakarta.validation.Valid;
-
-import java.util.List;
-
-
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/hospital")
@@ -36,7 +39,10 @@ public class HospitalController {
                 hospital.getPassword()
         );
     }
-
+    @GetMapping("/emergencies")
+public List<EmergencyResponseDTO> getEmergencies() {
+    return service.getMyEmergencies();
+}
     @GetMapping("/completed")
     public List<EmergencyResponseDTO> getCompleted() {
         return service.getCompletedEmergencies();
