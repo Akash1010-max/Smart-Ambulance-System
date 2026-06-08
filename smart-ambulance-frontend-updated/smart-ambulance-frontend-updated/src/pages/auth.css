@@ -1,0 +1,16 @@
+/* Subtle grid background on auth pages */
+.auth-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-right { z-index: 2; }
+.auth-left  { z-index: 2; }

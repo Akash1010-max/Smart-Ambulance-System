@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-void:     #080b10;
+  --bg-deep:     #0c1018;
+  --bg-surface:  #111620;
+  --bg-card:     #161c28;
+  --bg-glass:    rgba(22, 28, 40, 0.72);
+  --border:      rgba(255,255,255,0.07);
+  --border-mid:  rgba(255,255,255,0.12);
+
+  --red:         #e63946;
+  --red-dark:    #b52d38;
+  --red-glow:    rgba(230, 57, 70, 0.25);
+  --red-subtle:  rgba(230, 57, 70, 0.08);
+
+  --cyan:        #48cae4;
+  --cyan-subtle: rgba(72, 202, 228, 0.08);
+
+  --green:       #2ecc71;
+  --green-subtle:rgba(46, 204, 113, 0.08);
+  --orange:      #f4a261;
+  --yellow:      #ffd166;
+
+  --text-1: #f0f2f5;
+  --text-2: #8892a4;
+  --text-3: #4f5a6e;
+
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-card: 0 4px 32px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.04) inset;
+  --shadow-red:  0 0 40px rgba(230,57,70,0.2), 0 0 80px rgba(230,57,70,0.08);
+}
+
+html, body, #root {
+  width: 100%; min-height: 100vh;
+  background-color: var(--bg-void);
+  color: var(--text-1);
+  font-family: var(--font-body);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { display: block; place-items: unset; }
+
+a { color: inherit; text-decoration: none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+
+/* Leaflet fix */
+.leaflet-container { font-family: var(--font-body) !important; }
