@@ -1,24 +1,10 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
 import API from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../components/shared.css";
 import "./EmergencyRequest.css";
-
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
 
 const ambulanceIcon = new L.Icon({
   iconUrl: "https://cdn-icons-png.flaticon.com/512/2967/2967350.png",
@@ -92,7 +78,7 @@ export default function EmergencyRequest() {
       if (myEmergency) {
         setEmergencyStatus(myEmergency.status);
         if (myEmergency.ambulanceId) {
-          const ambRes = await API.get(`/api/ambulance/${myEmergency.ambulanceId}`);
+          const ambRes = await API.get(`/api/ambulance/id/${myEmergency.ambulanceId}`);
           if (ambRes.data.latitude && ambRes.data.longitude) {
             setAmbulanceLocation([ambRes.data.latitude, ambRes.data.longitude]);
           }

@@ -23,7 +23,7 @@ export default function Dashboard() {
               How can we help<br />you today?
             </h1>
             <p className="dash-hero-sub">
-              SwiftAid connects you to the nearest available ambulance in seconds.
+              Smart Ambulance System connects you to the nearest available ambulance in seconds.
               Click below to request emergency assistance.
             </p>
             <button

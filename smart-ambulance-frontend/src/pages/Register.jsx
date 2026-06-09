@@ -40,11 +40,11 @@ export default function Register() {
         <div className="auth-left-content">
           <div className="auth-logo">
             <div className="auth-logo-icon">🚑</div>
-            <span className="auth-logo-text">SwiftAid</span>
+            <span className="auth-logo-text">Smart Ambulance System</span>
           </div>
           <h1>Emergency help,<br />when you need<br /><span>it most.</span></h1>
           <p className="auth-left-desc">
-            Join SwiftAid and get access to real-time ambulance dispatch, live GPS tracking, and instant emergency response — all from your phone.
+            Join Smart Ambulance System and get access to real-time ambulance dispatch, live GPS tracking, and instant emergency response — all from your phone.
           </p>
           <div className="auth-stat-row">
             <div className="auth-stat">
@@ -58,7 +58,7 @@ export default function Register() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 SwiftAid · Built for emergencies</p>
+          <p className="auth-footer-text">© 2025 Smart Ambulance System · Built for emergencies</p>
         </div>
       </div>
 

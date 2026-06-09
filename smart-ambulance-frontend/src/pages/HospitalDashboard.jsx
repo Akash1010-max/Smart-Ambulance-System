@@ -11,7 +11,7 @@ export default function HospitalDashboard() {
 
   const fetchCases = async () => {
     try {
-      const res = await API.get("/api/hospital/emergencies");
+      const res = await API.get("/api/hospital/completed");
       setCases(res.data);
     } catch { /* silent */ }
     finally { setLoading(false); }

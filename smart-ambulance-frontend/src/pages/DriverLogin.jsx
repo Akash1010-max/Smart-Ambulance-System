@@ -40,7 +40,7 @@ export default function DriverLogin() {
         <div className="auth-left-content">
           <div className="auth-logo">
             <div className="auth-logo-icon">🚑</div>
-            <span className="auth-logo-text">SwiftAid</span>
+            <span className="auth-logo-text">Smart Ambulance System</span>
           </div>
           <h1>Driver<br /><span>Command</span><br />Center.</h1>
           <p className="auth-left-desc">
@@ -58,7 +58,7 @@ export default function DriverLogin() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 SwiftAid · Driver Portal</p>
+          <p className="auth-footer-text">© 2025 Smart Ambulance System · Driver Portal</p>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export default function DriverLogin() {
               <label>Driver email</label>
               <div className="field-input-wrap">
                 <span className="f-icon">✉</span>
-                <input type="email" placeholder="driver@swiftaid.com" value={email} onChange={e => setEmail(e.target.value)} />
+                <input type="email" placeholder="driver@smartambulancesystem.com" value={email} onChange={e => setEmail(e.target.value)} />
               </div>
             </div>
 

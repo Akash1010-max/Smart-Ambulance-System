@@ -37,7 +37,7 @@ export default function Login() {
         <div className="auth-left-content">
           <div className="auth-logo">
             <div className="auth-logo-icon">🚑</div>
-            <span className="auth-logo-text">SwiftAid</span>
+            <span className="auth-logo-text">Smart Ambulance System</span>
           </div>
           <h1>Saving lives<br />with <span>smart</span><br />dispatch.</h1>
           <p className="auth-left-desc">
@@ -59,7 +59,7 @@ export default function Login() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 SwiftAid · Built for emergencies</p>
+          <p className="auth-footer-text">© 2025 Smart Ambulance System · Built for emergencies</p>
         </div>
       </div>
 

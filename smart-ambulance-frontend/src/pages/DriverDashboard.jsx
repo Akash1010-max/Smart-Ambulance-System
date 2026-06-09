@@ -67,8 +67,8 @@ export default function DriverDashboard() {
   };
 
   const pending   = requests.filter(r => r.status === "PENDING");
-  const active = requests.filter(r => r.ambulanceId == ambulanceId && ["ACCEPTED","PICKED_UP","DROPPED"].includes(r.status));
-  
+  const active    = requests.filter(r => ["ACCEPTED","PICKED_UP","DROPPED"].includes(r.status));
+
   return (
     <div className="drv-page">
       <Navbar role="driver" />

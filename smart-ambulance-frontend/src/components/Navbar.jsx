@@ -33,7 +33,7 @@ export default function Navbar({ role = "user" }) {
       <div className="navbar-inner">
         <div className="navbar-brand" onClick={() => navigate(role === "driver" ? "/driver" : role === "hospital" ? "/hospital" : "/dashboard")}>
           <div className="navbar-logo-icon">🚑</div>
-          <span className="navbar-logo-text">SwiftAid</span>
+          <span className="navbar-logo-text">Smart Ambulance System</span>
         </div>
 
         <div className="navbar-links">

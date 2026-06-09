@@ -42,11 +42,11 @@ export default function AmbulanceRegister() {
         <div className="auth-left-content">
           <div className="auth-logo">
             <div className="auth-logo-icon">🚑</div>
-            <span className="auth-logo-text">SwiftAid</span>
+            <span className="auth-logo-text">Smart Ambulance System</span>
           </div>
           <h1>Register your<br /><span>ambulance</span><br />unit.</h1>
           <p className="auth-left-desc">
-            Join the SwiftAid driver network. Once registered, you'll receive emergency dispatch requests directly to your dashboard.
+            Join the Smart Ambulance System driver network. Once registered, you'll receive emergency dispatch requests directly to your dashboard.
           </p>
           <div className="auth-stat-row">
             <div className="auth-stat">
@@ -60,7 +60,7 @@ export default function AmbulanceRegister() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 SwiftAid · Driver Portal</p>
+          <p className="auth-footer-text">© 2025 Smart Ambulance System · Driver Portal</p>
         </div>
       </div>
 
