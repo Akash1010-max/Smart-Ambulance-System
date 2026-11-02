@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../services/api";
+import { useAuth } from "../auth/AuthContext";
 import "../components/shared.css";
 import "./auth.css";
 
@@ -9,22 +11,19 @@ export default function HospitalLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
-    if (!email || !password) { setError("Please fill in all fields."); return; }
+    if (!email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://localhost:8080/api/hospital/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("hospitalId", data.id);
-      localStorage.setItem("role", "hospital");
+      const res = await API.post("/api/hospital/login", { email, password });
+      const data = res.data;
+      login(data.token, "HOSPITAL", email, { hospitalId: data.id });
       navigate("/hospital");
     } catch {
       setError("Invalid hospital credentials. Please try again.");
@@ -42,7 +41,11 @@ export default function HospitalLogin() {
             <div className="auth-logo-icon">🏥</div>
             <span className="auth-logo-text">Smart Ambulance System</span>
           </div>
-          <h1>Hospital<br /><span>Operations</span><br />Portal.</h1>
+          <h1>
+            Hospital<br />
+            <span>Operations</span><br />
+            Portal.
+          </h1>
           <p className="auth-left-desc">
             Monitor incoming patients, view completed emergency cases, and coordinate with dispatch teams — all from your hospital dashboard.
           </p>
@@ -58,7 +61,7 @@ export default function HospitalLogin() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 Smart Ambulance System · Hospital Portal</p>
+          <p className="auth-footer-text">© 2026 Smart Ambulance System · Hospital Portal</p>
         </div>
       </div>
 
@@ -78,7 +81,12 @@ export default function HospitalLogin() {
               <label>Hospital email</label>
               <div className="field-input-wrap">
                 <span className="f-icon">✉</span>
-                <input type="email" placeholder="admin@hospital.com" value={email} onChange={e => setEmail(e.target.value)} />
+                <input
+                  type="email"
+                  placeholder="hospital@smartambulancesystem.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
             </div>
 
@@ -86,19 +94,48 @@ export default function HospitalLogin() {
               <label>Password</label>
               <div className="field-input-wrap">
                 <span className="f-icon">🔒</span>
-                <input type="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === "Enter" && handleLogin()} />
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                />
               </div>
             </div>
 
-            <button className="btn btn-primary" onClick={handleLogin} disabled={loading} style={{ marginTop: 8 }}>
+            <button
+              className="btn btn-primary"
+              onClick={handleLogin}
+              disabled={loading}
+              style={{ marginTop: 8 }}
+            >
               {loading ? <span className="spinner" /> : null}
               {loading ? "Signing in…" : "🏥  Sign in as Hospital"}
             </button>
 
-            <div className="divider">not a hospital?</div>
+            <div className="divider">other portals</div>
 
-            <button className="btn btn-ghost" style={{ width: "100%" }} onClick={() => navigate("/")}>
+            <button
+              className="btn btn-ghost"
+              style={{ width: "100%" }}
+              onClick={() => navigate("/")}
+            >
               ← Back to user login
+            </button>
+            <button
+              className="btn btn-ghost"
+              style={{ width: "100%", marginTop: 8 }}
+              onClick={() => navigate("/driver-login")}
+            >
+              🚑 Sign in as Driver
+            </button>
+            <button
+              className="btn btn-ghost"
+              style={{ width: "100%", marginTop: 8, borderColor: "rgba(255,209,102,0.3)", color: "var(--yellow)" }}
+              onClick={() => navigate("/admin-login")}
+            >
+              👑 Sign in as Administrator
             </button>
           </div>
         </div>

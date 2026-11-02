@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../services/api";
 import "../components/shared.css";
 import "./auth.css";
 
 export default function AmbulanceRegister() {
-  const [form, setForm] = useState({ driverName: "", email: "", password: "", vehicleNumber: "", phone: "" });
+  const [form, setForm] = useState({
+    driverName: "",
+    email: "",
+    password: "",
+    latitude: 12.9716,
+    longitude: 77.5946,
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -13,23 +20,31 @@ export default function AmbulanceRegister() {
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
 
   const handleRegister = async () => {
-    if (!form.driverName || !form.email || !form.password || !form.vehicleNumber) {
+    if (!form.driverName || !form.email || !form.password) {
       setError("Please fill in all required fields.");
       return;
     }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://localhost:8080/api/ambulance/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+      await API.post("/api/ambulance/register", {
+        driverName: form.driverName,
+        email: form.email,
+        password: form.password,
+        latitude: parseFloat(form.latitude) || 12.9716,
+        longitude: parseFloat(form.longitude) || 77.5946,
       });
-      if (!res.ok) throw new Error();
+
       setSuccess(true);
-      setTimeout(() => navigate("/driver-login"), 2000);
-    } catch {
-      setError("Registration failed. Please try again.");
+      setTimeout(() => navigate("/driver-login"), 1800);
+    } catch (err) {
+      const msg = err.response?.data?.message || "Registration failed. Please check your details and try again.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -60,7 +75,7 @@ export default function AmbulanceRegister() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 Smart Ambulance System · Driver Portal</p>
+          <p className="auth-footer-text">© 2026 Smart Ambulance System · Driver Portal</p>
         </div>
       </div>
 
@@ -94,22 +109,6 @@ export default function AmbulanceRegister() {
               <div className="field-input-wrap">
                 <span className="f-icon">🔒</span>
                 <input type="password" placeholder="Min. 6 characters" value={form.password} onChange={set("password")} />
-              </div>
-            </div>
-
-            <div className="field">
-              <label>Vehicle number *</label>
-              <div className="field-input-wrap">
-                <span className="f-icon">🚑</span>
-                <input placeholder="TN 01 AB 1234" value={form.vehicleNumber} onChange={set("vehicleNumber")} />
-              </div>
-            </div>
-
-            <div className="field">
-              <label>Phone number</label>
-              <div className="field-input-wrap">
-                <span className="f-icon">📞</span>
-                <input type="tel" placeholder="+91 98765 43210" value={form.phone} onChange={set("phone")} />
               </div>
             </div>
 

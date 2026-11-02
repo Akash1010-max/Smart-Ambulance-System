@@ -23,4 +23,5 @@ public interface AmbulanceRepository
     // Get all ambulances
     List<Ambulance> findAll();
 
+    long countByStatus(String status);
 }

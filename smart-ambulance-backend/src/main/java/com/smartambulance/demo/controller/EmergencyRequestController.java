@@ -2,6 +2,7 @@ package com.smartambulance.demo.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,13 +33,29 @@ public class EmergencyRequestController {
         return service.createEmergency(lat, lon);
     }
 
+    // User checks their current active emergency (restores tracking on reload)
+    @GetMapping("/my-active")
+    public ResponseEntity<EmergencyResponseDTO> getMyActive() {
+        EmergencyResponseDTO dto = service.getMyActiveEmergency();
+        if (dto == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(dto);
+    }
+
+    // User or Admin cancels emergency
+    @PutMapping("/{id}/cancel")
+    public EmergencyResponseDTO cancel(@PathVariable Long id) {
+        return service.cancel(id);
+    }
+
     // Driver sees pending emergencies
     @GetMapping("/pending")
     public List<EmergencyResponseDTO> getPending() {
         return service.getPendingEmergencies();
     }
 
-    // NEW: driver sees active emergencies
+    // Driver sees active emergencies
     @GetMapping("/active")
     public List<EmergencyResponseDTO> getActive() {
         return service.getActiveEmergencies();

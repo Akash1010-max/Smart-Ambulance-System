@@ -8,9 +8,12 @@ public interface EmergencyRequestService {
 
     EmergencyResponseDTO createEmergency(double lat, double lon);
 
+    EmergencyResponseDTO getMyActiveEmergency();
+
+    EmergencyResponseDTO cancel(Long id);
+
     List<EmergencyResponseDTO> getPendingEmergencies();
 
-    // NEW
     List<EmergencyResponseDTO> getActiveEmergencies();
 
     EmergencyResponseDTO assignAmbulance(Long emergencyId, Long ambulanceId);

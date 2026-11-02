@@ -157,6 +157,13 @@ function EmergencyCard({ req, onAction, loading }) {
     ? Math.round((Date.now() - new Date(req.createdAt).getTime()) / 60000) + " min ago"
     : "Just now";
 
+  const isPickedUpOrDropped = req.status === "PICKED_UP" || req.status === "DROPPED";
+  const hospitalNavUrl = req.hospitalLatitude && req.hospitalLongitude
+    ? `https://maps.google.com/?q=${req.hospitalLatitude},${req.hospitalLongitude}`
+    : req.hospitalAddress
+    ? `https://maps.google.com/?q=${encodeURIComponent(req.hospitalAddress)}`
+    : null;
+
   return (
     <div className={`drv-card ${req.status.toLowerCase()}`}>
       <div className="drv-card-top">
@@ -168,14 +175,26 @@ function EmergencyCard({ req, onAction, loading }) {
       </div>
 
       <div className="drv-card-body">
+        {/* Patient & Hospital Info Banner */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12, padding: "8px 10px", background: "rgba(255,255,255,0.03)", borderRadius: 8, fontSize: 13 }}>
+          <div style={{ color: "var(--text-1)" }}>
+            👤 <strong>Patient:</strong> {req.userName || `User #${req.userId}`}
+          </div>
+          {req.hospitalName && (
+            <div style={{ color: "var(--cyan)" }}>
+              🏥 <strong>Hospital:</strong> {req.hospitalName} {req.hospitalAddress ? `(${req.hospitalAddress})` : ""}
+            </div>
+          )}
+        </div>
+
         <div className="drv-coord-row">
           <div className="drv-coord">
-            <span className="drv-coord-label">Latitude</span>
-            <span className="drv-coord-val">{Number(req.latitude).toFixed(6)}</span>
+            <span className="drv-coord-label">Patient Lat</span>
+            <span className="drv-coord-val">{Number(req.latitude).toFixed(5)}</span>
           </div>
           <div className="drv-coord">
-            <span className="drv-coord-label">Longitude</span>
-            <span className="drv-coord-val">{Number(req.longitude).toFixed(6)}</span>
+            <span className="drv-coord-label">Patient Lon</span>
+            <span className="drv-coord-val">{Number(req.longitude).toFixed(5)}</span>
           </div>
           <div className="drv-coord">
             <span className="drv-coord-label">Reported</span>
@@ -197,14 +216,28 @@ function EmergencyCard({ req, onAction, loading }) {
 
       {cfg.nextAction && (
         <div className="drv-card-footer">
-          <a
-            href={`https://maps.google.com/?q=${req.latitude},${req.longitude}`}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-ghost btn-sm"
-          >
-            🗺 Navigate
-          </a>
+          {/* Smart navigation buttons based on current stage */}
+          {isPickedUpOrDropped && hospitalNavUrl ? (
+            <a
+              href={hospitalNavUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-ghost btn-sm"
+              style={{ borderColor: "var(--green)", color: "var(--green)" }}
+            >
+              🏥 Navigate Hospital
+            </a>
+          ) : (
+            <a
+              href={`https://maps.google.com/?q=${req.latitude},${req.longitude}`}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-ghost btn-sm"
+            >
+              🗺 Navigate Patient
+            </a>
+          )}
+
           <button
             className={`btn btn-sm drv-action-btn ${cfg.btnStyle}`}
             onClick={() => onAction(cfg.nextAction, req.id)}

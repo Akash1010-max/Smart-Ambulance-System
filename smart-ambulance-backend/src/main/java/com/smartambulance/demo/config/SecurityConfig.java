@@ -26,50 +26,66 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-
-    configuration.addAllowedOrigin("http://localhost:5173");
-    configuration.addAllowedHeader("*");
-    configuration.addAllowedMethod("*");
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-
-    return source;
-}
 
     @Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 
-    http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
+        // Allow all local dev origins (localhost, 127.0.0.1 on any port)
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
 
-                    // PUBLIC
-                    .requestMatchers("/api/users/register", "/api/users/login").permitAll()
-                    .requestMatchers("/api/ambulance/register", "/api/ambulance/login").permitAll()
-                    .requestMatchers("/api/hospital/register", "/api/hospital/login").permitAll()
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
 
-                    // USER
-                    .requestMatchers("/api/emergency/create").hasRole("USER")
+        return source;
+    }
 
-                    // AMBULANCE
-                    .requestMatchers("/api/emergency/pending").hasRole("AMBULANCE")
-                    .requestMatchers("/api/emergency/active").hasRole("AMBULANCE") 
-                    .requestMatchers("/api/emergency/assign/**").hasRole("AMBULANCE")
-                    .requestMatchers("/api/emergency/*/pickup").hasRole("AMBULANCE")
-                    .requestMatchers("/api/emergency/*/drop").hasRole("AMBULANCE")
-                    .requestMatchers("/api/emergency/*/complete").hasRole("AMBULANCE")
-                    .requestMatchers("/api/hospital/completed").hasRole("HOSPITAL")
-                    .requestMatchers("/api/hospital/emergencies").hasRole("HOSPITAL")
-                    // EVERYTHING ELSE
-                    .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-            
-    return http.build();
-}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+
+                        // PUBLIC
+                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers("/api/ambulance/login").permitAll()
+                        .requestMatchers("/api/hospital/login").permitAll()
+                        .requestMatchers("/api/admin/login").permitAll()
+                        .requestMatchers("/api/ambulance/register", "/api/hospital/register").permitAll()
+                        .requestMatchers("/api/ambulance/id/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+
+                        // ADMIN ONLY
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // USER
+                        .requestMatchers("/api/emergency/create", "/api/emergency/my-active").hasRole("USER")
+                        .requestMatchers("/api/emergency/*/cancel").hasAnyRole("USER", "ADMIN")
+
+                        // AMBULANCE
+                        .requestMatchers("/api/emergency/pending").hasAnyRole("AMBULANCE", "ADMIN")
+                        .requestMatchers("/api/emergency/active").hasAnyRole("AMBULANCE", "ADMIN")
+                        .requestMatchers("/api/emergency/assign/**").hasRole("AMBULANCE")
+                        .requestMatchers("/api/emergency/*/pickup").hasRole("AMBULANCE")
+                        .requestMatchers("/api/emergency/*/drop").hasRole("AMBULANCE")
+                        .requestMatchers("/api/emergency/*/complete").hasRole("AMBULANCE")
+                        .requestMatchers("/api/ambulance/location/**").hasRole("AMBULANCE")
+
+                        // HOSPITAL
+                        .requestMatchers("/api/hospital/completed").hasAnyRole("HOSPITAL", "ADMIN")
+                        .requestMatchers("/api/hospital/emergencies").hasAnyRole("HOSPITAL", "ADMIN")
+
+                        // EVERYTHING ELSE
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }

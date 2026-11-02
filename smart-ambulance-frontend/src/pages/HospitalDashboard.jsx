@@ -11,7 +11,7 @@ export default function HospitalDashboard() {
 
   const fetchCases = async () => {
     try {
-      const res = await API.get("/api/hospital/completed");
+      const res = await API.get("/api/hospital/emergencies");
       setCases(res.data);
     } catch { /* silent */ }
     finally { setLoading(false); }
@@ -75,7 +75,7 @@ export default function HospitalDashboard() {
 
         {/* Filter bar */}
         <div className="hosp-filter-bar">
-          {["ALL","COMPLETED","DROPPED","PICKED_UP"].map(f => (
+          {["ALL","COMPLETED","DROPPED","PICKED_UP","ACCEPTED"].map(f => (
             <button
               key={f}
               className={`hosp-filter-btn ${filter === f ? "active" : ""}`}
@@ -106,7 +106,8 @@ export default function HospitalDashboard() {
               <thead>
                 <tr>
                   <th>Case ID</th>
-                  <th>Location</th>
+                  <th>Patient</th>
+                  <th>Ambulance</th>
                   <th>Status</th>
                   <th>Time</th>
                   <th>Actions</th>
@@ -145,9 +146,17 @@ function CaseRow({ c }) {
         <span className="hosp-case-id">#{c.id}</span>
       </td>
       <td>
-        <span className="hosp-coords">
-          {Number(c.latitude).toFixed(5)}, {Number(c.longitude).toFixed(5)}
-        </span>
+        <strong>{c.userName || `User #${c.userId}`}</strong>
+        {c.userEmail && <div style={{ fontSize: 11, color: "var(--text-3)" }}>{c.userEmail}</div>}
+      </td>
+      <td>
+        {c.ambulanceId ? (
+          <span style={{ color: "var(--cyan)" }}>
+            🚑 {c.ambulanceDriverName || `Unit #${c.ambulanceId}`}
+          </span>
+        ) : (
+          <span style={{ color: "var(--text-3)" }}>Unassigned</span>
+        )}
       </td>
       <td>
         <span className={`badge ${badgeMap[c.status] || "badge-completed"}`}>
@@ -164,7 +173,7 @@ function CaseRow({ c }) {
           rel="noreferrer"
           className="btn btn-ghost btn-sm"
         >
-          🗺 View location
+          🗺 View patient
         </a>
       </td>
     </tr>
