@@ -2,24 +2,20 @@ package com.smartambulance.demo.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class AmbulanceRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "Driver name is required")
     private String driverName;
 
-    @Email
-    @NotBlank
+    @Email(message = "Valid email is required")
+    @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password is required")
     private String password;
 
-    @NotNull
     private Double latitude;
-
-    @NotNull
     private Double longitude;
 
     public AmbulanceRequestDTO() {}

@@ -27,7 +27,13 @@ export default function Register() {
       });
       navigate("/");
     } catch (err) {
-      setError(err?.response?.data?.message || "Registration failed. Please try again.");
+      if (err?.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (!err.response || err.message?.includes("Network")) {
+        setError("Cannot connect to backend server. Please verify the backend is running on port 8080.");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -58,7 +64,7 @@ export default function Register() {
           </div>
         </div>
         <div className="auth-left-footer">
-          <p className="auth-footer-text">© 2025 Smart Ambulance System · Built for emergencies</p>
+          <p className="auth-footer-text">© 2026 Smart Ambulance System · Built for emergencies</p>
         </div>
       </div>
 

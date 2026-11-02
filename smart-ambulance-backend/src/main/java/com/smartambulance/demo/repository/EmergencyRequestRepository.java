@@ -1,6 +1,7 @@
 package com.smartambulance.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,9 +18,15 @@ public interface EmergencyRequestRepository
 
     boolean existsByUserAndStatusIn(User user, List<String> statuses);
 
+    Optional<EmergencyRequest> findFirstByUserAndStatusInOrderByCreatedAtDesc(User user, List<String> statuses);
+
     boolean existsByAmbulanceAndStatusIn(Ambulance ambulance, List<String> statuses);
 
     List<EmergencyRequest> findByHospitalId(Long hospitalId);
 
     List<EmergencyRequest> findByHospitalIdAndStatus(Long hospitalId, String status);
+
+    long countByStatus(String status);
+
+    long countByStatusIn(List<String> statuses);
 }

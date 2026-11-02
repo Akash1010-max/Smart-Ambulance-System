@@ -1,0 +1,14 @@
+.git/
+.gitignore
+.mvn/
+mvnw
+mvnw.cmd
+.idea/
+*.iml
+.vscode/
+*.log
+docker-compose*.yml
+.env
+src/
+target/*
+!target/*.jar
