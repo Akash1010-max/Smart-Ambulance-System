@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.smartambulance.demo.config.jwt.JwtUtil;
 import com.smartambulance.demo.dto.AuthResponseDTO;
@@ -20,6 +21,7 @@ import com.smartambulance.demo.repository.HospitalRepository;
 import com.smartambulance.demo.service.HospitalService;
 
 @Service
+@Transactional
 public class HospitalServiceImpl implements HospitalService {
 
     private final HospitalRepository repository;
@@ -44,13 +46,14 @@ public class HospitalServiceImpl implements HospitalService {
                 h.getId(),
                 h.getName(),
                 h.getEmail(),
-                h.getAddress()
+                h.getAddress(),
+                h.getLatitude(),
+                h.getLongitude()
         );
     }
 
     @Override
     public HospitalResponseDTO registerHospital(HospitalRequestDTO dto) {
-
         if (repository.existsByEmail(dto.getEmail())) {
             throw new IllegalStateException("Email already registered");
         }
@@ -60,17 +63,18 @@ public class HospitalServiceImpl implements HospitalService {
         hospital.setEmail(dto.getEmail());
         hospital.setPassword(passwordEncoder.encode(dto.getPassword()));
         hospital.setAddress(dto.getAddress());
+        hospital.setLatitude(dto.getLatitude() != null ? dto.getLatitude() : 12.9716);
+        hospital.setLongitude(dto.getLongitude() != null ? dto.getLongitude() : 77.5946);
 
         Hospital saved = repository.save(hospital);
-
         return mapToDTO(saved);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AuthResponseDTO loginHospital(String email, String password) {
-
         Hospital hospital = repository.findByEmail(email)
-        .orElseThrow(() -> new ResourceNotFoundException("Hospital not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Hospital not found"));
 
         if (!passwordEncoder.matches(password, hospital.getPassword())) {
             throw new InvalidCredentialsException("Wrong password");
@@ -85,20 +89,12 @@ public class HospitalServiceImpl implements HospitalService {
     }
 
     private EmergencyResponseDTO mapEmergencyToDTO(EmergencyRequest req) {
-        return new EmergencyResponseDTO(
-                req.getId(),
-                req.getLatitude(),
-                req.getLongitude(),
-                req.getStatus(),
-                req.getCreatedAt(),
-                req.getUser().getId(),
-                req.getAmbulance() != null ? req.getAmbulance().getId() : null,
-                req.getHospital() != null ? req.getHospital().getId() : null
-        );
+        return EmergencyResponseDTO.from(req);
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public List<EmergencyResponseDTO> getCompletedEmergencies() {
-
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
@@ -113,8 +109,9 @@ public class HospitalServiceImpl implements HospitalService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public List<EmergencyResponseDTO> getMyEmergencies() {
-
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
@@ -124,16 +121,7 @@ public class HospitalServiceImpl implements HospitalService {
 
         return emergencyRepository.findByHospitalId(hospital.getId())
                 .stream()
-                .map(e -> new EmergencyResponseDTO(
-                        e.getId(),
-                        e.getLatitude(),
-                        e.getLongitude(),
-                        e.getStatus(),
-                        e.getCreatedAt(),
-                        e.getUser().getId(),
-                        e.getAmbulance() != null ? e.getAmbulance().getId() : null,
-                        e.getHospital() != null ? e.getHospital().getId() : null
-                ))
+                .map(this::mapEmergencyToDTO)
                 .toList();
     }
 }

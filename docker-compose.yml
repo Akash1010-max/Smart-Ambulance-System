@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./smart-ambulance-backend
+      dockerfile: Dockerfile
+    container_name: smart-ambulance-backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-smart_ambulance}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER:-root}
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD:-Akash@2006}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - smart-ambulance-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: smart-ambulance-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Akash@2006}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-smart_ambulance}
+    ports:
+      - "${MYSQL_PORT:-3308}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - smart-ambulance-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  smart-ambulance-network:
+    driver: bridge

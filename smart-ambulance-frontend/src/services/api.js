@@ -16,13 +16,18 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 (expired/invalid token) → redirect to login
+// Handle 401 (expired/invalid token) → redirect to login only on protected requests, NOT login/register attempts
 API.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const url = err.config?.url || "";
+    const isAuthEndpoint = url.includes("/login") || url.includes("/register");
+
+    if (err.response?.status === 401 && !isAuthEndpoint) {
       localStorage.clear();
-      window.location.href = "/";
+      if (window.location.pathname !== "/" && !window.location.pathname.includes("login")) {
+        window.location.href = "/";
+      }
     }
     return Promise.reject(err);
   }
