@@ -1,6 +1,4 @@
-# 🚑 Smart Ambulance System (SAS)
-
-> **Next-Generation Real-Time Emergency Healthcare Dispatch & Fleet Coordination Platform**
+# Smart Ambulance System – Real-Time Emergency Healthcare Dispatch & Fleet Coordination
 
 [![Java](https://img.shields.io/badge/Java-17-orange.svg?logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.2-brightgreen.svg?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
@@ -11,127 +9,50 @@
 [![Leaflet](https://img.shields.io/badge/Leaflet-Maps-199900.svg?logo=leaflet&logoColor=white)](https://leafletjs.com/)
 [![JWT](https://img.shields.io/badge/Security-Stateless%20JWT-black.svg?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
----
+Smart Ambulance System (SAS) is a full-stack web-based emergency healthcare dispatch and fleet coordination platform designed to eliminate critical response delays through automated GPS pinpointing, intelligent nearest-hospital binding, live telemetry tracking, and integrated triage workflows.
 
-## 📖 Table of Contents
+The system provides role-based access for patients, ambulance drivers, hospital personnel, and system administrators while maintaining complete dispatch traceability, operational integrity, and real-time geospatial coordination.
 
-- [Overview](#-overview)
-- [Key Features & Portals](#-key-features--portals)
-- [Visual Walkthrough & UI Showcase](#-visual-walkthrough--ui-showcase)
-- [System Architecture](#-system-architecture)
-- [Emergency Lifecycle State Machine](#-emergency-lifecycle-state-machine)
-- [Tech Stack](#-tech-stack)
-- [Default Login Credentials](#-default-login-credentials)
-- [REST API Reference](#-rest-api-reference)
-- [Getting Started](#-getting-started)
-  - [Option 1: Docker Compose (Recommended)](#option-1-docker-compose-recommended)
-  - [Option 2: Manual Local Setup](#option-2-manual-local-setup)
-- [Environment Variables](#-environment-variables)
-- [Security & Architectural Highlights](#-security--architectural-highlights)
-- [Author & Acknowledgments](#-author--acknowledgments)
+<table>
+  <tr>
+    <td width="50%"><img src="docs/imgs/01-login-portal.png" alt="Unified Authentication Portal" /></td>
+    <td width="50%"><img src="docs/imgs/02-patient-dashboard.png" alt="Patient Emergency Dashboard" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/imgs/03-emergency-request-map.png" alt="Geospatial Pin-Drop & Dispatch Map" /></td>
+    <td width="50%"><img src="docs/imgs/04-emergency-live-tracking.png" alt="Live Emergency Tracking & Route Progression" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/imgs/08-admin-system-overview.png" alt="Admin Telemetry & System KPIs" /></td>
+    <td width="50%"><img src="docs/imgs/06-admin-fleet-management.png" alt="Fleet Operations & Real-Time Availability" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/imgs/07-admin-hospital-management.png" alt="Hospital Lifecycle Management" /></td>
+    <td width="50%"><img src="docs/imgs/05-admin-dispatch-logs.png" alt="Emergency Dispatch Audit Trail" /></td>
+  </tr>
+</table>
 
----
+## Features
 
-## 🌟 Overview
-
-Medical emergencies demand rapid, frictionless coordination between distressed patients, emergency ambulance crews, and receiving hospitals. **Smart Ambulance System (SAS)** eliminates dispatch delays by providing an automated, real-time geospatial ecosystem:
-
-1. **Patients** trigger emergency assistance with instant GPS coordinate pinpointing.
-2. **Backend Engine** automatically identifies and binds the nearest hospital utilizing the **Haversine spherical distance algorithm**.
-3. **Ambulance Drivers** receive immediate dispatch alerts, accept requests, broadcast continuous GPS heartbeats, and receive two-stage navigation routing (to patient $\rightarrow$ to hospital).
-4. **Hospitals** gain live visibility into incoming critical trauma cases before arrival.
-5. **System Administrators** oversee fleet availability, onboard hospitals and drivers, and monitor emergency response analytics.
-
----
-
-## ⚡ Key Features & Portals
-
-### 👤 1. Patient Portal (`/dashboard`, `/emergency`)
-- **One-Click Emergency Dispatch:** Instant GPS coordinates capture via browser Geolocation API.
-- **Interactive Geospatial Map:** Dark-mode high-contrast Leaflet map with user pin-drop and live ambulance marker tracking.
-- **Dynamic 5-Stage Timeline:** Visual progress indicators: `Request sent` $\rightarrow$ `Ambulance en route` $\rightarrow$ `Patient picked up` $\rightarrow$ `At hospital` $\rightarrow$ `Case completed`.
-- **Assigned Hospital & Driver Transparency:** Displays receiving hospital name, physical address, and assigned driver details.
-- **Active State Persistence:** Automatically restores ongoing emergencies on page reload so patients are never stranded.
-- **Emergency Cancellation:** Allows safe cancellation of `PENDING` requests with automatic ambulance release.
-
-### 🚑 2. Ambulance Driver Command Center (`/driver`)
-- **Live Dispatch Feed:** Immediate view of `PENDING` emergency requests with timestamps and coordinates.
-- **Automated GPS Heartbeat:** Continuously broadcasts driver coordinates to the backend every 3 seconds.
-- **Two-Stage Smart Navigation:**
-  - *Stage 1 (En Route):* Direct Google Maps navigation link to the patient's coordinates.
-  - *Stage 2 (Picked Up):* Automatically switches navigation link to the designated hospital's location.
-- **Lifecycle Progression Controls:** One-tap action buttons for `Accept Emergency`, `Mark Picked Up`, `Drop at Hospital`, and `Complete Case`.
-- **Dynamic Fleet Availability:** Automatically transitions driver status to `BUSY` on assignment and restores to `AVAILABLE` upon completion.
-
-### 🏥 3. Hospital Operations Portal (`/hospital`)
-- **Incoming Case Triage:** Real-time visibility into all active emergencies assigned to the hospital.
-- **Patient & Unit Attribution:** Displays patient identity, contact information, and assigned ambulance unit.
-- **Status Filtering:** Instant filtering across `ALL`, `ACCEPTED`, `PICKED_UP`, `DROPPED`, and `COMPLETED`.
-- **Operations Analytics:** Real-time counters for Total Cases, Completed Cases, and Today's Active Admissions.
-
-### 👑 4. Administrator Management Suite (`/admin`)
-- **Real-Time Telemetry & KPIs:** Live metrics displaying Total Hospitals, Total Ambulances, Available vs. Busy Fleet count, Active Emergencies, and Historical Dispatch volume.
-- **Hospital Lifecycle Management:** Admin-only account creation, GPS coordinates mapping, profile updates, and deletions.
-- **Fleet Management:** Driver onboarding, real-time availability badges (`AVAILABLE` / `BUSY`), GPS tracker inspection, and password resets.
-- **System Audit Logs:** Comprehensive tabular dispatch history tracking patient ID, assigned ambulance, assigned hospital, and execution timestamps.
-
----
-
-## 📸 Visual Walkthrough & UI Showcase
-
-### 1. Unified Authentication Gateway
-> Modern glassmorphic sign-in interface supporting patient accounts and quick portals for Drivers, Hospitals, and System Administrators.
-
-![Authentication Portal](docs/imgs/01-login-portal.png)
-
----
-
-### 2. Patient Experience & Dashboard
-> Clean hero dashboard featuring dynamic radar pulse animations, average response time metrics, and emergency dispatch initiation.
-
-![Patient Dashboard](docs/imgs/02-patient-dashboard.png)
-
----
-
-### 3. Geolocation Pin-Drop & Dispatch
-> Accurate browser-based GPS coordinate acquisition integrated with interactive Leaflet mapping and dark-mode tile rendering.
-
-![Emergency Request Geolocation](docs/imgs/03-emergency-request-map.png)
-
----
-
-### 4. Real-Time Emergency Tracking & Hospital Routing
-> Live patient tracking interface featuring a 5-step status progression timeline, assigned receiving hospital card (`GEM Hospital`), live dispatch state, and cancel controls.
-
-![Live Emergency Tracking](docs/imgs/04-emergency-live-tracking.png)
-
----
-
-### 5. Administrator Control Center — System Overview
-> Live system telemetry displaying fleet availability ratios, active rescue runs, registered hospitals, and centralized role credentials management.
-
-![Admin System Overview](docs/imgs/08-admin-system-overview.png)
-
----
-
-### 6. Hospital Lifecycle Management
-> Dedicated administrative management interface for registering, updating, and reviewing hospital facilities and geographic coordinates.
-
-![Admin Hospital Management](docs/imgs/07-admin-hospital-management.png)
-
----
-
-### 7. Fleet Operations & Driver Monitoring
-> Real-time ambulance fleet registry showing driver names, login statuses, live availability indicators, and coordinates.
-
-![Admin Fleet Operations](docs/imgs/06-admin-fleet-management.png)
-
----
-
-### 8. Emergency Dispatch Audit Trail
-> Comprehensive audit logs tracking every emergency case from initiation to final hospital drop-off.
-
-![Admin Dispatch Logs](docs/imgs/05-admin-dispatch-logs.png)
+- User registration and authentication
+- Stateless JWT authentication
+- Role-Based Access Control (RBAC)
+- Four user roles:
+  - `ADMIN` — System configuration, fleet supervision, hospital management, and dispatch audit logs
+  - `HOSPITAL` — Inbound triage monitoring, patient admissions, and historical case analytics
+  - `AMBULANCE` — Dispatch reception, live GPS heartbeat broadcast, and two-stage navigation
+  - `USER` — One-click GPS emergency dispatch, real-time live ambulance tracking, and case cancellation
+- Real-time GPS coordinate acquisition via browser Geolocation API
+- Interactive high-contrast Leaflet geospatial map with custom ambulance, patient, and hospital pins
+- Automated nearest-hospital assignment using the Haversine spherical distance algorithm
+- Real-time 5-stage emergency lifecycle progression tracking
+- Two-stage smart turn-by-turn navigation (Patient pickup $\rightarrow$ Hospital delivery)
+- Dynamic ambulance fleet availability management (`AVAILABLE` / `BUSY`)
+- Real-time GPS heartbeat broadcasting for ambulance units
+- Hospital triage dashboard with live inbound emergency visibility
+- Administrative telemetry, system KPI counters, and fleet oversight
+- Hospital onboarding, coordinate mapping, and capacity management
+- Comprehensive end-to-end dispatch audit trail
 
 ---
 
@@ -410,4 +331,3 @@ npm run dev
 * **Lead Developer:** Akash ([@Akash](https://github.com/))
 * **Institution:** Sri Krishna College of Technology (SKCT)
 * **License:** MIT License — Open source for emergency healthcare innovation.
-
